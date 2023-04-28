@@ -9,3 +9,16 @@ You've been asked to refactor the function `deterministicPartitionKey` in [`dpk.
 You will be graded on the exhaustiveness and quality of your unit tests, the depth of your refactor, and the level of insight into your thought process provided by the written explanation.
 
 ## Your Explanation Here
+
+
+This function although implements simple logic was difficult to understand because of its cyclomatic complexity, meaning the number of possible routes through the code. For example, when a "null" was provided we already have enough information to return the desired result "0". However, one has to follow through with most of the code to reach that conclusion.
+
+To improve readability, I separated the code into three distinct blocks (i) no input is provided, (ii) a partition key, and (iii) an event without a partition key. Each of these three cases can be separated logically making the code more linear, predictable, and easier to read.
+
+(i) This is the simplest case as we'll simply return a constant
+
+(ii) The logic to manipulate a partition was placed in an independent pure function that is unaware of the remaining cases (allows for unit testing of this function specifically).
+
+(iii) The last case can also be handled independently by simply running the string version of the input through a hash.
+
+One aspect that improved the code was the removal of the variable `candidate` as it was used through the entire function and could be influenced by all three cases mentioned above. This means it is more likely for an error in one case to affect another.
